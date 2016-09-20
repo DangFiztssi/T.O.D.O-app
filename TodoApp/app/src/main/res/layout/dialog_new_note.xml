@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/new_note_background"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/edtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:hint="@string/hint_title_note"
+                android:textColor="@color/black_color"
+                android:textSize="@dimen/title_font_size" />
+
+            <EditText
+                android:id="@+id/edtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
+                android:hint="@string/hint_title_description"
+                android:textColor="@color/black_color"
+                android:textSize="@dimen/description_font_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pick_color"
+                    android:textColor="@color/black_color"
+                    android:textSize="@dimen/label_font_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/picker_image_white"
+                        android:layout_width="@dimen/custom_circle_image_size"
+                        android:layout_height="@dimen/custom_circle_image_size"
+                        android:layout_margin="@dimen/margin_between_color_images"
+                        android:background="@drawable/circle_image_white">
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/picker_image_orange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_between_color_images"
+                        android:background="@drawable/circle_image_orange"></RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/picker_image_pink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_between_color_images"
+                        android:background="@drawable/circle_image_pink"></RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/picker_image_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_between_color_images"
+                        android:background="@drawable/circle_image_blue"></RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mark_is_important"
+                    android:textColor="@color/black_color"
+                    android:textSize="@dimen/label_font_size" />
+
+                <Switch
+                    android:id="@+id/markIsImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="66dp"
+                    android:layout_marginRight="66dp"
+                    android:textOff="Off"
+                    android:textOn="On" />
+            </RelativeLayout>
+
+            <!--
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lableReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder"
+                    android:textColor="@color/black_color"
+                    android:textSize="@dimen/label_font_size" />
+
+                <Switch
+                    android:id="@+id/markIsReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lableReminder">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sep, 20 2016" />
+                </LinearLayout>
+            </RelativeLayout>
+            -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lableReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder"
+                    android:textColor="@color/black_color"
+                    android:textSize="@dimen/label_font_size" />
+
+                <TextView
+                    android:id="@+id/tvReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/tvSwitch"
+                    android:background="@drawable/custom_button_reminder"
+                    android:padding="4dp"
+                    android:text="Sep,20 2015"
+                    android:textColor="@color/white_color" />
+
+                <TextView
+                    android:id="@+id/tvSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="Off?"
+                    android:textColor="@color/red_color" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/btnSave"
+                    android:layout_width="@dimen/save_button_size"
+                    android:layout_height="@dimen/save_button_size"
+                    android:src="@drawable/save" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

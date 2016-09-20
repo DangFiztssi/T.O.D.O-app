@@ -1,6 +1,27 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">4dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Card Note item -->
+    <dimen name="card_radius">6dp</dimen>
+    <dimen name="card_margin">6dp</dimen>
+    <dimen name="height_card">80dp</dimen>
+    <dimen name="title_card_font_size">24sp</dimen>
+    <dimen name="card_content_margin">3dp</dimen>
+    <dimen name="description_card_font_size">12sp</dimen>
+    <dimen name="icon_size">28dp</dimen>
+    <dimen name="margin_between_icons">10dp</dimen>
+    <dimen name="max_width_description">100dp</dimen>
+    <dimen name="due_date_font_size">12sp</dimen>
+    
+    <!-- Add new note -->
+    <dimen name="margin_between_row">4dp</dimen>
+    <dimen name="title_font_size">16sp</dimen>
+    <dimen name="description_font_size">16sp</dimen>
+    <dimen name="label_font_size">16sp</dimen>
+    <dimen name="custom_circle_image_size">32dp</dimen>
+    <dimen name="margin_between_color_images">8dp</dimen>
+    <dimen name="save_button_size">42dp</dimen>
 </resources>
