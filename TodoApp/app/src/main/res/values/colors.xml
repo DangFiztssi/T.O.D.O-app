@@ -3,4 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="card_background">#FFCC66</color>
+    <color name="new_note_background">#C2B49A</color>
+    <color name="black_color">#000000</color>
+    <color name="white_color">#ffffff</color>
+    <color name="orange_color">#FBAF3F</color>
+    <color name="pink_color">#EC008B</color>
+    <color name="blue_color">#1B75BB</color>
+    <color name="red_color">#FC0000</color>
 </resources>
