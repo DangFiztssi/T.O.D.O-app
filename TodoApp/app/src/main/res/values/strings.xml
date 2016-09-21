@@ -7,4 +7,9 @@
     <string name="pick_color">Pick  color</string>
     <string name="mark_is_important">Mark is important?</string>
     <string name="reminder">Reminder</string>
+
+    <string name="white_color">ffffff</string>;
+    <string name="orange_color">FBAF3F</string>
+    <string name="pink_color">EC008B</string>
+    <string name="blue_color">1B75BB</string>
 </resources>

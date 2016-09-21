@@ -11,7 +11,9 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.dangfiztssi.todoapp.MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/lnMain"
+    android:background="@color/white_color">
 
     <ScrollView
         android:layout_width="match_parent"

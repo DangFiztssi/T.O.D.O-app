@@ -1,9 +1,10 @@
-package com.example.dangfiztssi.todoapp;
+package com.example.dangfiztssi.todoapp.db;
 
 /**
  * Created by DangF on 09/19/16.
  */
 public class Note {
+    private long id ;
     private String title;
     private String description;
     private String color;
@@ -11,6 +12,11 @@ public class Note {
     private boolean isDone;
     private boolean isReminder;
     private boolean isPriority;
+    private int colorType;
+
+    public Note(){
+
+    }
 
     public Note(String title, String description, String color, String dueDate, boolean isDone, boolean isReminder, boolean isPriority) {
         this.title = title;
@@ -20,6 +26,15 @@ public class Note {
         this.isReminder = isReminder;
         this.isPriority = isPriority;
         this.color = color;
+//        this.colorType = colorType;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -76,5 +91,13 @@ public class Note {
 
     public void setPriority(boolean priority) {
         isPriority = priority;
+    }
+
+    public int getColorType() {
+        return colorType;
+    }
+
+    public void setColorType(int colorType) {
+        this.colorType = colorType;
     }
 }
