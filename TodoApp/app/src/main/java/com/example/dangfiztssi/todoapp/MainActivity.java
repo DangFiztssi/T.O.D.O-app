@@ -18,6 +18,7 @@ import com.example.dangfiztssi.todoapp.db.Note;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvTodoMain.setLayoutManager(layoutManager);
         rvTodoMain.setAdapter(presenter.getAdapter());
+        rvTodoMain.setNestedScrollingEnabled(false);
 
         presenter.readDB();
 
@@ -99,12 +101,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void readDB(){presenter.readDB();}
+
     public void updateDB(Note note){
         presenter.updateDB(note);
     }
 
     public void deleteDB(Note note){
         presenter.deleteDB(note);
+    }
+
+    public void deleteAllDB(){
+        presenter.deleteAllDB();
+    }
+
+    public void addAllDB(List<Note> lstNode)
+    {
+        presenter.addAllDB(lstNode);
     }
 
 }

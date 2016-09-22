@@ -21,6 +21,7 @@ import com.example.dangfiztssi.todoapp.db.NoteContact;
 import com.example.dangfiztssi.todoapp.db.NoteDBHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by DangF on 09/19/16.
@@ -175,8 +176,8 @@ public class MainActivityPresenter {
                 null, null, null, null, null
         );
 
-//        c.moveToFirst();
-        while (c.moveToNext()){
+        c.moveToFirst();
+        while (!c.isAfterLast()){
             Note note = new Note();
 
             note.setId(c.getLong(0));
@@ -188,8 +189,11 @@ public class MainActivityPresenter {
             note.setDone((c.getInt(6) == 1)? true : false);
 
             lstNoteMain.add(note);
+
             c.moveToNext();
         }
+
+        c.close();
 
         adapter.notifyDataSetChanged();
     }
@@ -232,6 +236,27 @@ public class MainActivityPresenter {
         );
 
         if(count >= 0) readDB();
+    }
+
+    public void deleteAllDB(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+
+        int count = db.delete(
+                NoteContact.NoteEntry.TABLE,
+                null,
+                null
+        );
+    }
+
+    public void addAllDB(List<Note> lstNote){
+        try {
+            for (Note note : lstNote)
+                saveNewNote(note);
+        }
+        catch (Exception e){
+            Log.e("error", e + "");
+        }
     }
 
 

@@ -8,8 +8,9 @@
     <color name="new_note_background">#C2B49A</color>
     <color name="black_color">#000000</color>
     <color name="white_color">#ffffff</color>
-    <color name="orange_color">#FBAF3F</color>
-    <color name="pink_color">#EC008B</color>
-    <color name="blue_color">#1B75BB</color>
+    <color name="orange_color">#99FBAF3F</color>
+    <color name="pink_color">#99ED1C24</color>
+    <color name="blue_color">#9927A9E1</color>
     <color name="red_color">#FC0000</color>
+    <color name="green_color">#9976FF03</color>
 </resources>

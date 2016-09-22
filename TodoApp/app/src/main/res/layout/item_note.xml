@@ -10,10 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/card_margin"
         android:clickable="true"
+        android:elevation="8dp"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:elevation="8dp"
-        app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="@dimen/card_radius">
 
         <LinearLayout
@@ -78,17 +77,20 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:padding="4dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/lnIcons"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
 
@@ -103,16 +105,17 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lnIcons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true">
+                    android:layout_gravity="center_vertical">
 
                     <ImageView
                         android:id="@+id/btnCheckDone"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
                         android:layout_marginRight="@dimen/margin_between_icons"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:src="@drawable/check_done_black" />
 
                     <ImageView
@@ -122,15 +125,17 @@
                         android:layout_marginRight="@dimen/margin_between_icons"
                         android:src="@drawable/edit_black" />
 
+
                     <ImageView
                         android:id="@+id/btnDelete"
                         android:layout_width="@dimen/icon_size"
                         android:layout_height="@dimen/icon_size"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:src="@drawable/delete_black" />
 
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
 
         </LinearLayout>

@@ -2,14 +2,15 @@ package com.example.dangfiztssi.todoapp;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dangfiztssi.todoapp.db.Note;
 
@@ -71,22 +72,6 @@ public class ItemNoteAdapter extends RecyclerView.Adapter<ItemNoteAdapter.myView
         holder.tvDueDate.setText(note.getDueDate());
         holder.tvDes.setText(note.getDescription());
 
-        //TODO: set background
-//        int colorBg = 0;
-//        switch (note.getColorType()) {
-//            case 0:
-//                colorBg = R.color.white_color;
-//                break;
-//            case 1:
-//                colorBg = R.color.orange_color;
-//                break;
-//            case 2:
-//                colorBg = R.color.pink_color;
-//                break;
-//            default:
-//                colorBg = R.color.blue_color;
-//        }
-        Log.e("color card", note.getColor() + "");
         holder.mainCard.setCardBackgroundColor(Color.parseColor("#" + note.getColor()));
 
         //TODO: set priority
@@ -95,12 +80,10 @@ public class ItemNoteAdapter extends RecyclerView.Adapter<ItemNoteAdapter.myView
         else
             holder.imgStar.setImageResource(R.drawable.star_black);
 
-        holder.imgStar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        if(note.isDone())
+            holder.imgCheckDone.setImageResource(R.drawable.check_done);
+        else
+            holder.imgCheckDone.setImageResource(R.drawable.check_done_black);
 
         clickEvent(holder, note);
 
@@ -153,14 +136,31 @@ public class ItemNoteAdapter extends RecyclerView.Adapter<ItemNoteAdapter.myView
         holder.imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Toast.makeText(activity,"has click edit",Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.imgDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final  int pos = lstNoteMain.indexOf(note);
+
+                lstNoteMain.remove(note);
+                notifyDataSetChanged();
                 ((MainActivity) activity).deleteDB(note);
+
+                Snackbar.make(v, "Deleted 1 note", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                lstNoteMain.add(pos,note);
+                                notifyDataSetChanged();
+
+//                                ((MainActivity)activity).deleteAllDB();
+//                                ((MainActivity)activity).addAllDB(lstNoteMain);
+                            }
+                        }).show();
             }
         });
     }

@@ -8,8 +8,8 @@
     <string name="mark_is_important">Mark is important?</string>
     <string name="reminder">Reminder</string>
 
-    <string name="white_color">ffffff</string>;
-    <string name="orange_color">FBAF3F</string>
-    <string name="pink_color">EC008B</string>
-    <string name="blue_color">1B75BB</string>
+    <string name="white_color">99ffff</string>;
+    <string name="orange_color">99FBAF3F</string>
+    <string name="pink_color">99ED1C24</string>
+    <string name="blue_color">991B75BB</string>
 </resources>
