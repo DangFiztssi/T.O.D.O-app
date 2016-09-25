@@ -1,22 +1,25 @@
 package com.example.dangfiztssi.todoapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.dangfiztssi.todoapp.db.Note;
 import com.example.dangfiztssi.todoapp.db.NoteContact;
 import com.example.dangfiztssi.todoapp.db.NoteDBHelper;
 
@@ -28,7 +31,8 @@ import java.util.List;
  */
 public class MainActivityPresenter {
     MainActivity activity;
-    ItemNoteAdapter adapter;
+//    ItemNoteAdapter adapter;
+    RowNoteAdapter adapter;
     private ArrayList<Note> lstNoteMain = new ArrayList<>();
     NoteDBHelper dbHelper;
 
@@ -36,99 +40,134 @@ public class MainActivityPresenter {
 
     public MainActivityPresenter(MainActivity activity) {
         this.activity = activity;
-        adapter = new ItemNoteAdapter(activity, lstNoteMain);
+//        adapter = new ItemNoteAdapter(activity, lstNoteMain);
+        adapter = new RowNoteAdapter(activity, lstNoteMain);
         dbHelper = new NoteDBHelper(activity);
+
     }
 
-    public ItemNoteAdapter getAdapter(){
+    public RowNoteAdapter getAdapter(){
         return adapter;
     }
 
-    public void addNewNote(){
+    public void addNewNote(final int position){
+        /**
+         *position to determine Update or New
+         * position = -1 :  New note
+         * position >=0 : Update
+         */
         final Dialog dia = new Dialog(activity);
         LayoutInflater inflater = ((LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE));
-        View view = inflater.inflate(R.layout.dialog_new_note,null);
+        final View view = inflater.inflate(R.layout.dialog_new_note,null);
         dia.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dia.setContentView(view);
         dia.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dia.setCanceledOnTouchOutside(false);
 
         final EditText edtTitle, edtDescription;
-        RelativeLayout white, orange, pink, blue;
         final Switch isImportant;
         TextView tvReminder;
         TextView tvOffReminder;
         ImageView btnNew;
+        ImageView btnCancel;
 
         edtTitle = (EditText) view.findViewById(R.id.edtTitle);
         edtDescription = (EditText) view.findViewById(R.id.edtDescription);
-        white = (RelativeLayout) view.findViewById(R.id.picker_image_white);
-        orange = (RelativeLayout) view.findViewById(R.id.picker_image_orange);
-        pink = (RelativeLayout) view.findViewById(R.id.picker_image_pink);
-        blue = (RelativeLayout) view.findViewById(R.id.picker_image_blue);
         isImportant = (Switch) view.findViewById(R.id.markIsImportant);
         tvReminder = (TextView) view.findViewById(R.id.tvReminder);
         tvOffReminder = (TextView)view.findViewById(R.id.tvSwitch);
         btnNew = (ImageView) view.findViewById(R.id.btnSave);
+        btnCancel = (ImageView) view.findViewById(R.id.btnCancel);
 
-        color = "ffffff";
 
-        white.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: set tick circle
-                Log.e("white",color + "");
-                color  = activity.getResources().getString(R.string.white_color);
-            }
-        });
-        orange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: set tick circle
-                Log.e("orange",color + "");
-                color = activity.getResources().getString(R.string.orange_color);
-            }
-        });
-
-        pink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: set tick circle
-                Log.e("pink",color + "");
-                color = activity.getResources().getString(R.string.pink_color);
-            }
-        });
-
-        blue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: set tick circle
-                Log.e("blue",color + "");
-                color = activity.getResources().getString(R.string.blue_color);
-            }
-        });
 
         btnNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("has click","");
                 boolean important = false;
                 if(isImportant.isChecked())
                     important = true;
 
+
                 if(isValidForAdd(edtTitle.getText() + "",edtDescription.getText() + "")) {
-                    saveNewNote(new Note(edtTitle.getText() + "",
-                            edtDescription.getText() + "",
-                            color,
-                            "",
-                            false,
-                            false,
-                            important ? true : false));
-                    dia.dismiss();
+                    if(position < 0) {
+                        saveNewNote(new Note(edtTitle.getText() + "",
+                                edtDescription.getText() + "",
+                                color,
+                                "",
+                                false,
+                                false,
+                                important ? true : false));
+                    }
+                    else{
+                        Note tmp = lstNoteMain.get(position);
+                        tmp.setTitle(edtTitle.getText()+ "");
+                        tmp.setDescription(edtDescription.getText() + "");
+                        //TODO: save Reminder and Star
+
+                        adapter.notifyItemChanged(position);
+                        activity.updateDB(tmp);
+                    }
+                    setAnimHide(dia.getCurrentFocus().getRootView());
                 }
+
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAnimHide(dia.getCurrentFocus().getRootView());
+            }
+        });
+
+
+        dia.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                setAnimShow(dia.getCurrentFocus().getRootView());
+            }
+        });
+
+        if(position >= 0){
+            Note noteEdit = lstNoteMain.get(position);
+            edtTitle.setText(noteEdit.getTitle() + "");
+            edtDescription.setText(noteEdit.getDescription() + "");
+            //TODO set data for reminder and star
+        }
+
         dia.show();
+    }
+
+    private void setAnimShow(View view){
+        int centerX = (view.getLeft() + view.getRight()) / 2;
+        int centerY = (view.getTop() + view.getBottom()) / 2;
+
+        float finalRadius = (float) Math.max(centerX, centerY);
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0, finalRadius);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        view.setVisibility(View.VISIBLE);
+        animator.start();
+    }
+
+    private void setAnimHide(final View view){
+        int centerX = (view.getLeft() + view.getRight()) / 2;
+        int centerY = (view.getTop() + view.getBottom()) / 2;
+
+        float initRadius = view.getWidth();
+
+        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, view.getHeight(), initRadius,0);
+
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.INVISIBLE);
+                super.onAnimationEnd(animation);
+            }
+        });
+
+        animator.start();
     }
 
     private boolean isValidForAdd(String title, String description){
@@ -136,24 +175,6 @@ public class MainActivityPresenter {
             return false;
 
         return true;
-    }
-
-    private void saveNewNote(Note note){
-        //TODO; save to Database
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(NoteContact.NoteEntry.COL_NOTE_TITLE, note.getTitle());
-        values.put(NoteContact.NoteEntry.COL_NOTE_DESCRIPTION, note.getDescription());
-        values.put(NoteContact.NoteEntry.COL_NOTE_COLOR, note.getColor());
-        values.put(NoteContact.NoteEntry.COL_NOTE_DUE_DATE, note.getDueDate());
-        values.put(NoteContact.NoteEntry.COL_NOTE_PRIORITY, note.isPriority() ? 1 : 0);
-        values.put(NoteContact.NoteEntry.COL_NOTE_DONE, note.isDone() ? 1 :0);
-
-        long id_ = db.insert(NoteContact.NoteEntry.TABLE, null, values);
-        note.setId(id_);
-
-        lstNoteMain.add(note);
-        adapter.notifyDataSetChanged();
     }
 
     public void readDB(){
@@ -167,7 +188,8 @@ public class MainActivityPresenter {
                 NoteContact.NoteEntry.COL_NOTE_COLOR,
                 NoteContact.NoteEntry.COL_NOTE_DUE_DATE,
                 NoteContact.NoteEntry.COL_NOTE_PRIORITY,
-                NoteContact.NoteEntry.COL_NOTE_DONE
+                NoteContact.NoteEntry.COL_NOTE_DONE,
+                NoteContact.NoteEntry.COL_POSITION_ID
         };
 
         Cursor c = db.query(
@@ -176,6 +198,7 @@ public class MainActivityPresenter {
                 null, null, null, null, null
         );
 
+        List<Note> lstTmp = new ArrayList<>();
         c.moveToFirst();
         while (!c.isAfterLast()){
             Note note = new Note();
@@ -187,17 +210,72 @@ public class MainActivityPresenter {
             note.setDueDate(c.getString(4));
             note.setPriority((c.getInt(5) == 1)? true : false);
             note.setDone((c.getInt(6) == 1)? true : false);
+            note.setPosId((Integer)c.getInt(7));
 
-            lstNoteMain.add(note);
+            Log.e("pos id", note.getPosId() + "");
+
+            lstTmp.add(note);
 
             c.moveToNext();
         }
-
         c.close();
 
+
+        for(int i = 0; i < lstTmp.size() ; i++){
+            for(int j = 0; j < lstTmp.size(); j++){
+                if(lstTmp.get(j).getPosId() ==  i) {
+                    lstNoteMain.add(lstTmp.get(j));
+                    break;
+                }
+            }
+        }
+
+
+
+//        lstNoteMain.addAll(lstTmp);
+
+//                for(Note note : lstNoteMain){
+//            Log.e("pos - name", note.getPosId() + " - " + note.getTitle());
+//        }
         adapter.notifyDataSetChanged();
+//        for(Note n : lstTmp){
+//            lstNoteMain.add(lstTmp.size(),n);
+//            adapter.notifyItemInserted(lstTmp.size());
+//        }
     }
 
+    private void saveNewNote(Note note){
+        //TODO; save to Database
+
+        if(note.isPriority()) { //Add first
+            lstNoteMain.add(0,note);
+            adapter.notifyItemInserted(0);
+
+        }
+        else { //Add end
+            lstNoteMain.add(lstNoteMain.size(),note);
+            adapter.notifyItemInserted(lstNoteMain.size());
+        }
+
+        resetPosId();
+        saveNewNoteDB(note);
+        updateAllDB();
+    }
+
+    public void saveNewNoteDB(Note node){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NoteContact.NoteEntry.COL_NOTE_TITLE, node.getTitle());
+        values.put(NoteContact.NoteEntry.COL_NOTE_DESCRIPTION, node.getDescription());
+        values.put(NoteContact.NoteEntry.COL_NOTE_COLOR, node.getColor());
+        values.put(NoteContact.NoteEntry.COL_NOTE_DUE_DATE, node.getDueDate());
+        values.put(NoteContact.NoteEntry.COL_NOTE_PRIORITY, node.isPriority() ? 1 : 0);
+        values.put(NoteContact.NoteEntry.COL_NOTE_DONE, node.isDone() ? 1 :0);
+        values.put(NoteContact.NoteEntry.COL_POSITION_ID, node.getPosId());
+
+        long id_ = db.insert(NoteContact.NoteEntry.TABLE, null, values);
+        node.setId(id_);
+    }
 
     public void updateDB(Note note){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -220,7 +298,7 @@ public class MainActivityPresenter {
                 selectionArgs
         );
 
-        if(count >= 0) readDB();
+//        if(count >= 0) readDB();
     }
 
     public void deleteDB(Note note){
@@ -234,31 +312,31 @@ public class MainActivityPresenter {
                 selection,
                 selectionArgs
         );
-
-        if(count >= 0) readDB();
     }
 
     public void deleteAllDB(){
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-
-        int count = db.delete(
-                NoteContact.NoteEntry.TABLE,
-                null,
-                null
-        );
+        for(Note n : lstNoteMain)
+            deleteDB(n);
     }
 
-    public void addAllDB(List<Note> lstNote){
-        try {
-            for (Note note : lstNote)
-                saveNewNote(note);
-        }
-        catch (Exception e){
-            Log.e("error", e + "");
-        }
+    private void addNotesIntoDB(){
+        for(Note n : lstNoteMain)
+            saveNewNoteDB(n);
     }
 
+    public void updateAllDB(){
+//        deleteAllDB();
+//        addNotesIntoDB();
+        for(Note n: lstNoteMain)
+            updateDB(n);
+    }
 
+    public void resetPosId(){
+        for(int i = 0; i < lstNoteMain.size() ; i++)
+            lstNoteMain.get(i).setPosId(i);
 
+//        for(Note note : lstNoteMain){
+//            Log.e("pos - name", note.getPosId() + " - " + note.getTitle());
+//        }
+    }
 }

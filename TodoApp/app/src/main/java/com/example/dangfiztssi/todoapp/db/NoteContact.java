@@ -18,5 +18,6 @@ public class NoteContact {
         public static final String COL_NOTE_PRIORITY = "priority";
         public static final String COL_NOTE_DONE = "done";
         public static final String COL_NOTE_COLOR = "color";
+        public static final String COL_POSITION_ID = "position";
     }
 }

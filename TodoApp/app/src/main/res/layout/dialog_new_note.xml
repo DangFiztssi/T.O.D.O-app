@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/new_note_background"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:background="#F4F8F9"
+    android:paddingBottom="@dimen/padding_top_bottom_dialog_new"
+    android:paddingRight="12dp"
+    android:paddingTop="@dimen/padding_top_bottom_dialog_new"
+    android:paddingLeft="12dp"
+    android:id="@+id/lnMainDialog">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,9 +26,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_between_row"
+                android:layout_marginTop="@dimen/margin_between_row"
                 android:hint="@string/hint_title_note"
-                android:textColor="@color/black_color"
-                android:textSize="@dimen/title_font_size" />
+                android:textColorHint="#DEE1E2"
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/title_font_size"
+                android:background="@null"/>
 
             <EditText
                 android:id="@+id/edtDescription"
@@ -33,10 +40,18 @@
                 android:layout_marginBottom="@dimen/margin_between_row"
                 android:layout_marginTop="@dimen/margin_between_row"
                 android:hint="@string/hint_title_description"
-                android:textColor="@color/black_color"
-                android:textSize="@dimen/description_font_size" />
+                android:textColorHint="#DEE1E2"
+                android:textColor="@color/blue_color"
+                android:textSize="@dimen/description_font_size"
+                android:background="@null"
+                android:lines="4"
+                android:gravity="top|left"
+                android:maxLines="4"
+                android:scrollbars="none"
+                android:inputType="textMultiLine"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_between_row"
@@ -90,6 +105,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_between_row"
@@ -159,31 +175,40 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/lableReminder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/reminder"
                     android:textColor="@color/black_color"
                     android:textSize="@dimen/label_font_size" />
+                <LinearLayout
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lableReminder">
+
 
                 <TextView
                     android:id="@+id/tvReminder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/tvSwitch"
                     android:background="@drawable/custom_button_reminder"
-                    android:padding="4dp"
-                    android:text="Sep,20 2015"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    android:text="9:00AM Sep,20 2016"
                     android:textColor="@color/white_color" />
 
                 <TextView
                     android:id="@+id/tvSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
                     android:text="Off?"
-                    android:textColor="@color/red_color" />
+                    android:textColor="@color/red_color"/>
+
+                </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout
@@ -191,13 +216,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal">
 
                 <ImageView
                     android:id="@+id/btnSave"
                     android:layout_width="@dimen/save_button_size"
                     android:layout_height="@dimen/save_button_size"
-                    android:src="@drawable/save" />
+                    android:src="@drawable/tick_save"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/btnCancel"
+                    android:layout_width="@dimen/save_button_size"
+                    android:layout_height="@dimen/save_button_size"
+                    android:src="@drawable/cancel"  />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

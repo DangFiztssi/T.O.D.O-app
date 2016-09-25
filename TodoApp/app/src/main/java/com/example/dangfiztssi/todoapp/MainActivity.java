@@ -1,5 +1,8 @@
 package com.example.dangfiztssi.todoapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,17 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.dangfiztssi.todoapp.db.Note;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private MainActivityPresenter presenter;
     private RecyclerView rvTodoMain;
+    public RecyclerView.LayoutManager layoutManager;
     private LinearLayout lnMain;
+
+    private PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
         presenter = new MainActivityPresenter(this);
 
         rvTodoMain = (RecyclerView) findViewById(R.id.rvMain);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+         layoutManager = new LinearLayoutManager(this);
         rvTodoMain.setLayoutManager(layoutManager);
         rvTodoMain.setAdapter(presenter.getAdapter());
         rvTodoMain.setNestedScrollingEnabled(false);
 
-        presenter.readDB();
+        readDB();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,10 +56,30 @@ public class MainActivity extends AppCompatActivity {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 
-                presenter.addNewNote();
-
+                addNewNote(-1);
             }
         });
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2016);
+        calendar.set(Calendar.MONTH, 8);
+        calendar.set(Calendar.DAY_OF_MONTH, 23);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 34);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.AM_PM,Calendar.PM);
+
+        long test = calendar.getTimeInMillis()/1000;
+        Log.e("epoch time", test + "");
+
+        Intent intent = new Intent(MainActivity.this, MyReceiver.class);
+
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
 
     }
 
@@ -101,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void addNewNote(int position){
+        presenter.addNewNote(position);
+    }
+
     public void readDB(){presenter.readDB();}
 
     public void updateDB(Note note){
@@ -115,9 +143,12 @@ public class MainActivity extends AppCompatActivity {
         presenter.deleteAllDB();
     }
 
-    public void addAllDB(List<Note> lstNode)
-    {
-        presenter.addAllDB(lstNode);
+    public void updateAllDB(){
+        presenter.updateAllDB();
+    }
+
+    public void resetPosId(){
+        presenter.resetPosId();
     }
 
 }

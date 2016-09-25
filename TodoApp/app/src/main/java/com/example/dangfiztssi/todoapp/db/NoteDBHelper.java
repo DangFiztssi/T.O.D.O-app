@@ -26,7 +26,9 @@ public class NoteDBHelper extends SQLiteOpenHelper {
                 NoteContact.NoteEntry.COL_NOTE_COLOR + TEXT_TYPE + "," + //Color
                 NoteContact.NoteEntry.COL_NOTE_DUE_DATE + TEXT_TYPE + "," + //Due date
                 NoteContact.NoteEntry.COL_NOTE_PRIORITY + INT_TYPE + "," + //priority
-                NoteContact.NoteEntry.COL_NOTE_DONE + INT_TYPE + ");";
+                NoteContact.NoteEntry.COL_NOTE_DONE + INT_TYPE + "," +
+                NoteContact.NoteEntry.COL_POSITION_ID + INT_TYPE +
+                 ");";
 
         Log.e("sql query",createDB + "");
         db.execSQL(createDB);

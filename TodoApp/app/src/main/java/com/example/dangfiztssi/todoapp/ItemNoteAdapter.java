@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dangfiztssi.todoapp.db.Note;
-
 import java.util.List;
 
 /**

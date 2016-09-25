@@ -15,13 +15,21 @@
     <dimen name="margin_between_icons">10dp</dimen>
     <dimen name="max_width_description">100dp</dimen>
     <dimen name="due_date_font_size">12sp</dimen>
-    
+
+    <dimen name="padding_main_card">8dp</dimen>
+    <dimen name="due_date_font_size_main_card">12sp</dimen>
+    <dimen name="description_card_font_size_main_card">14sp</dimen>
+    <dimen name="padding_linear_optional_main_card">12dp</dimen>
+
+
     <!-- Add new note -->
-    <dimen name="margin_between_row">4dp</dimen>
-    <dimen name="title_font_size">16sp</dimen>
-    <dimen name="description_font_size">16sp</dimen>
-    <dimen name="label_font_size">16sp</dimen>
+    <dimen name="padding_top_bottom_dialog_new">32dp</dimen>
+    <dimen name="margin_between_row">8dp</dimen>
+    <dimen name="title_font_size">28sp</dimen>
+    <dimen name="description_font_size">18sp</dimen>
+    <dimen name="label_font_size">18sp</dimen>
     <dimen name="custom_circle_image_size">32dp</dimen>
     <dimen name="margin_between_color_images">8dp</dimen>
     <dimen name="save_button_size">42dp</dimen>
+    <dimen name="margin_berween_btn">32dp</dimen>
 </resources>
