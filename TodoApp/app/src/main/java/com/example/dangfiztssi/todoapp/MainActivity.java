@@ -1,9 +1,8 @@
 package com.example.dangfiztssi.todoapp;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -12,14 +11,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView.LayoutManager layoutManager;
     private LinearLayout lnMain;
 
-    private PendingIntent pendingIntent;
+    public PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,26 +61,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, 2016);
-        calendar.set(Calendar.MONTH, 8);
-        calendar.set(Calendar.DAY_OF_MONTH, 23);
-
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 34);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM,Calendar.PM);
-
-        long test = calendar.getTimeInMillis()/1000;
-        Log.e("epoch time", test + "");
-
-        Intent intent = new Intent(MainActivity.this, MyReceiver.class);
-
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
-
     }
 
     @Override
@@ -91,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -99,20 +79,31 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            saveAsImage(lnMain);
+//            saveAsImage(lnMain);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveAsImage(LinearLayout ln){
+    public void saveAsImage(Note note){
         Log.e("save as image","...");
-        String fileName = "test.jpeg";
+        String fileName = "test2.jpeg";
+        View v = LayoutInflater.from(this).inflate(R.layout.dialog_new_note, null, false );
+
+        EditText edttitle, edtDes;
+        edttitle = (EditText) v.findViewById(R.id.edtTitle);
+        edtDes = (EditText) v.findViewById(R.id.edtDescription);
+
+        edtDes.setText(note.getTitle());
+        edtDes.setText(note.getDescription());
+
         File sdCard = Environment.getExternalStorageDirectory();
-        ln.setDrawingCacheEnabled(true);
-        Bitmap bitmap = ln.getDrawingCache();
-        Log.e("run","....");
+        v.setDrawingCacheEnabled(true);
+//        Bitmap bitmap = v.getDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(255, 255, Bitmap.Config.ARGB_8888);
+        v.draw(new Canvas(bitmap));
+        Log.e("run","..");
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 95, new FileOutputStream(new File(sdCard, fileName)));
             Log.e("success","");
@@ -122,11 +113,10 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.e("done",".");
-
     }
 
     public void addNewNote(int position){
-        presenter.addNewNote(position);
+        presenter.showDialogAddNew(position);
     }
 
     public void readDB(){presenter.readDB();}

@@ -32,4 +32,5 @@
     <dimen name="margin_between_color_images">8dp</dimen>
     <dimen name="save_button_size">42dp</dimen>
     <dimen name="margin_berween_btn">32dp</dimen>
+    <dimen name="icon_star_size">22dp</dimen>
 </resources>

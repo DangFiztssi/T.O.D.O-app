@@ -31,6 +31,7 @@ public class ReminderService extends Service {
 
         Intent i = new Intent(this.getApplicationContext(), MainActivity.class);
 
+
         i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -38,7 +39,7 @@ public class ReminderService extends Service {
         Notification.Builder builder = new Notification.Builder(this.getApplicationContext())
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Reminder todo app")
-                .setContentText("Test reminder")
+                .setContentText("Click to view")
                 .setContentIntent(pendingIntent);
 
         Notification notification = builder.build();

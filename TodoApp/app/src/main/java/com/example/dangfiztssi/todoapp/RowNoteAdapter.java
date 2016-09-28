@@ -3,6 +3,7 @@ package com.example.dangfiztssi.todoapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,8 +71,17 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
         holder.tvTile.setText(note.getTitle() + "");
 //        holder.tvDueDate.setText(note.getDueDate() + " ");
-        holder.tvDueDate.setText("Due: Sep, 23 2016");
         holder.tvDes.setText(note.getDescription() + "");
+
+        if(note.isReminder()){
+            holder.tvDueDate.setVisibility(View.VISIBLE);
+            long str = Long.parseLong(note.getDueDate()+"");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            holder.tvDueDate.setText("Due: " + sdf.format(new Date(str*1000)));
+        }
+        else{
+            holder.tvDueDate.setVisibility(View.GONE);
+        }
 
         if(note.isPriority())
             holder.imgStar.setImageResource(R.drawable.star);
@@ -91,10 +103,14 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
         animationMenuOption(holder);
 
-        if(note.isDone())
+        if(note.isDone()) {
             holder.imgIconDone.setImageResource(R.drawable.check_done);
-        else
+            holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        else {
             holder.imgIconDone.setImageResource(R.drawable.check_done_black);
+            holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
 
         setOnClick(holder,note);
     }
@@ -198,6 +214,14 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
             }
         });
 
+        holder.lnHeader.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ((MainActivity)activity).saveAsImage(note);
+                return false;
+            }
+        });
+
         holder.imgStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,6 +244,9 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
                     lstNoteMain.add(lstNoteMain.size(),tmp);
                 }
                 ((MainActivity)activity).resetPosId();
+
+
+
                 ((MainActivity)activity).updateAllDB();
             }
         });
@@ -229,10 +256,14 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
             public void onClick(View v) {
                 note.setDone(!note.isDone());
 
-                if(note.isDone())
+                if(note.isDone()) {
                     holder.imgIconDone.setImageResource(R.drawable.check_done);
-                else
+                    holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                else {
                     holder.imgIconDone.setImageResource(R.drawable.check_done_black);
+                    holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                }
                 ((MainActivity)activity).updateDB(note);
             }
         });

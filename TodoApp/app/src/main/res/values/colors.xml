@@ -20,4 +20,5 @@
     <color name="bg_button">#23AFE5</color>
 
     <color name="item_note_pressed">#F1F1F2</color>
+    <color name="gray_color">#808284</color>
 </resources>
