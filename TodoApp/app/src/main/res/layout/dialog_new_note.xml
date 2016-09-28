@@ -1,205 +1,300 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnMainDialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/new_note_background"
+    android:background="#F4F8F9"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:paddingBottom="@dimen/padding_top_bottom_dialog_new"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="@dimen/padding_top_bottom_dialog_new">
 
     <ScrollView
+        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <EditText
-                android:id="@+id/edtTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:hint="@string/hint_title_note"
-                android:textColor="@color/black_color"
-                android:textSize="@dimen/title_font_size" />
-
-            <EditText
-                android:id="@+id/edtDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:layout_marginTop="@dimen/margin_between_row"
-                android:hint="@string/hint_title_description"
-                android:textColor="@color/black_color"
-                android:textSize="@dimen/description_font_size" />
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:layout_marginTop="@dimen/margin_between_row"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+
+                <EditText
+                    android:id="@+id/edtTitle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/pick_color"
-                    android:textColor="@color/black_color"
-                    android:textSize="@dimen/label_font_size" />
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:background="@null"
+                    android:hint="@string/hint_title_note"
+                    android:lines="2"
+                    android:maxLines="2"
+                    android:textColor="@color/blue_color"
+                    android:textColorHint="#DEE1E2"
+                    android:textSize="@dimen/title_font_size" />
+
+                <EditText
+                    android:id="@+id/edtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:background="@null"
+                    android:gravity="top|left"
+                    android:hint="@string/hint_title_description"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:maxLines="4"
+                    android:scrollbars="none"
+                    android:textColor="@color/blue_color"
+                    android:textColorHint="#DEE1E2"
+                    android:textSize="@dimen/description_font_size" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-
-
-                    <RelativeLayout
-                        android:id="@+id/picker_image_white"
-                        android:layout_width="@dimen/custom_circle_image_size"
-                        android:layout_height="@dimen/custom_circle_image_size"
-                        android:layout_margin="@dimen/margin_between_color_images"
-                        android:background="@drawable/circle_image_white">
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/picker_image_orange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_between_color_images"
-                        android:background="@drawable/circle_image_orange"></RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/picker_image_pink"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_between_color_images"
-                        android:background="@drawable/circle_image_pink"></RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/picker_image_blue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_between_color_images"
-                        android:background="@drawable/circle_image_blue"></RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:layout_marginTop="@dimen/margin_between_row"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mark_is_important"
-                    android:textColor="@color/black_color"
-                    android:textSize="@dimen/label_font_size" />
-
-                <Switch
-                    android:id="@+id/markIsImportant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="66dp"
-                    android:layout_marginRight="66dp"
-                    android:textOff="Off"
-                    android:textOn="On" />
-            </RelativeLayout>
-
-            <!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:layout_marginTop="@dimen/margin_between_row"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/lableReminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reminder"
-                    android:textColor="@color/black_color"
-                    android:textSize="@dimen/label_font_size" />
-
-                <Switch
-                    android:id="@+id/markIsReminder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/lableReminder">
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sep, 20 2016" />
+                        android:text="@string/pick_color"
+                        android:textColor="@color/black_color"
+                        android:textSize="@dimen/label_font_size" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+
+                        <RelativeLayout
+                            android:id="@+id/picker_image_white"
+                            android:layout_width="@dimen/custom_circle_image_size"
+                            android:layout_height="@dimen/custom_circle_image_size"
+                            android:layout_margin="@dimen/margin_between_color_images"
+                            android:background="@drawable/circle_image_white"></RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/picker_image_orange"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_between_color_images"
+                            android:background="@drawable/circle_image_orange"></RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/picker_image_pink"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_between_color_images"
+                            android:background="@drawable/circle_image_pink"></RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/picker_image_blue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_between_color_images"
+                            android:background="@drawable/circle_image_blue"></RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
-            </RelativeLayout>
-            -->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_between_row"
-                android:layout_marginTop="@dimen/margin_between_row"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/lableReminder"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/reminder"
-                    android:textColor="@color/black_color"
-                    android:textSize="@dimen/label_font_size" />
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/tvReminder"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_is_important"
+                        android:textColor="@color/black_color"
+                        android:textSize="@dimen/label_font_size" />
+
+                    <Switch
+                        android:id="@+id/markIsImportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="66dp"
+                        android:layout_marginRight="66dp"
+                        android:textOff="Off"
+                        android:textOn="On" />
+                </RelativeLayout>
+
+                <!--
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/tvSwitch"
-                    android:background="@drawable/custom_button_reminder"
-                    android:padding="4dp"
-                    android:text="Sep,20 2015"
-                    android:textColor="@color/white_color" />
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvSwitch"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/lableReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reminder"
+                        android:textColor="@color/black_color"
+                        android:textSize="@dimen/label_font_size" />
+
+                    <Switch
+                        android:id="@+id/markIsReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lableReminder">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sep, 20 2016" />
+                    </LinearLayout>
+                </RelativeLayout>
+                -->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="Off?"
-                    android:textColor="@color/red_color" />
-            </RelativeLayout>
+                    android:layout_marginBottom="@dimen/margin_between_row"
+                    android:layout_marginTop="@dimen/margin_between_row"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal">
+                    <TextView
+                        android:id="@+id/lableReminder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reminder"
+                        android:textColor="@color/black_color"
+                        android:textSize="@dimen/label_font_size"
+                        android:visibility="gone" />
 
-                <ImageView
-                    android:id="@+id/btnSave"
-                    android:layout_width="@dimen/save_button_size"
-                    android:layout_height="@dimen/save_button_size"
-                    android:src="@drawable/save" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lableReminder"
+                        android:gravity="center_horizontal">
+
+
+                        <LinearLayout
+                            android:paddingRight="8dp"
+                            android:background="@drawable/custom_button_reminder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvTimeReminder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="8dp"
+                                android:paddingLeft="24dp"
+                                android:paddingRight="24dp"
+                                android:paddingTop="8dp"
+                                android:text="9:00AM"
+                                android:textColor="@color/white_color"
+                                />
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorPrimaryDark"
+                                />
+                            <TextView
+                                android:id="@+id/tvDateReminder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="8dp"
+                                android:paddingLeft="24dp"
+                                android:paddingRight="24dp"
+                                android:paddingTop="8dp"
+                                android:text="Sep,20 2016"
+                                android:textColor="@color/white_color" />
+
+                            <ImageView
+                                android:id="@+id/btnEnableReminder"
+                                android:layout_width="@dimen/icon_star_size"
+                                android:layout_height="@dimen/icon_star_size"
+                                android:src="@drawable/cancel_black"
+                                android:layout_gravity="center_vertical"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/tvSwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Off?"
+                            android:textColor="@color/red_color" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/btnSave"
+                            android:layout_width="@dimen/save_button_size"
+                            android:layout_height="@dimen/save_button_size"
+                            android:src="@drawable/tick_save" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/btnCancel"
+                            android:layout_width="@dimen/save_button_size"
+                            android:layout_height="@dimen/save_button_size"
+                            android:src="@drawable/cancel" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:tag="false"
+                android:id="@+id/btnStar"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:layout_gravity="right"
+                android:src="@drawable/star_black" />
+
+        </FrameLayout>
     </ScrollView>
 </LinearLayout>
