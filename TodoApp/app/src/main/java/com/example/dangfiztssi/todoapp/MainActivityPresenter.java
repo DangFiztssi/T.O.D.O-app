@@ -13,9 +13,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +33,6 @@ import android.widget.TimePicker;
 import com.example.dangfiztssi.todoapp.db.NoteContact;
 import com.example.dangfiztssi.todoapp.db.NoteDBHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,7 +92,6 @@ public class MainActivityPresenter {
         dia.setCanceledOnTouchOutside(false);
 
         final EditText edtTitle, edtDescription;
-        final Switch isImportant;
         final TextView tvDateReminder, tvTimeReminder;
         final ImageView btnStar, btnEnableReminder;
         ImageView btnNew;
@@ -102,7 +99,6 @@ public class MainActivityPresenter {
 
         edtTitle = (EditText) view.findViewById(R.id.edtTitle);
         edtDescription = (EditText) view.findViewById(R.id.edtDescription);
-        isImportant = (Switch) view.findViewById(R.id.markIsImportant);
         btnNew = (ImageView) view.findViewById(R.id.btnSave);
         btnCancel = (ImageView) view.findViewById(R.id.btnCancel);
         btnStar= (ImageView) view.findViewById(R.id.btnStar);
@@ -130,9 +126,8 @@ public class MainActivityPresenter {
 
             if(noteEdit.isReminder()){
 
-                Log.e("is reminder", noteEdit.isReminder() + "");
                 btnEnableReminder.setTag(1);
-                btnEnableReminder.setImageResource(R.drawable.check_yes);
+                btnEnableReminder.setImageResource(R.drawable.cancel_black);
                 tvDateReminder.setEnabled(true);
                 tvTimeReminder.setEnabled(true);
                 tvDateReminder.setTextColor(activity.getResources().getColor(R.color.white_color));
@@ -151,7 +146,7 @@ public class MainActivityPresenter {
             else{
                 btnStar.setTag(0);
                 btnEnableReminder.setTag(0);
-                btnEnableReminder.setImageResource(R.drawable.cancel_black);
+                btnEnableReminder.setImageResource(R.drawable.check_yes);
                 tvDateReminder.setEnabled(false);
                 tvTimeReminder.setEnabled(false);
                 tvDateReminder.setTextColor(activity.getResources().getColor(R.color.gray_color));
@@ -271,7 +266,6 @@ public class MainActivityPresenter {
                                 (Integer)btnStar.getTag()==1 ? true : false);
                         saveNewNote(n);
 
-                        setAlarm(n);
                     }
                     else{
                         Note tmp = lstNoteMain.get(position);
@@ -486,6 +480,12 @@ public class MainActivityPresenter {
                 null
         );
 
+
+        if(note.isReminder()){
+            if(SystemClock.elapsedRealtime() < Long.parseLong(note.getDueDate() + ""))
+                setReminder(note);
+        }
+
     }
 
     public void deleteDB(Note note){
@@ -554,8 +554,17 @@ public class MainActivityPresenter {
 
     }
 
+    public void setReminder(Note note){
+        long triggerMillis = Long.parseLong(note.getDueDate()+"");
 
-    public void saveImageNote(Note note){
+        Intent intent = new Intent(activity, MyReceiver.class);
+        intent.putExtra(activity.getResources().getString(R.string.title_key), note.getTitle() + "");
+        intent.putExtra(activity.getResources().getString(R.string.des_key), note.getDescription() + "");
+        intent.putExtra(activity.getResources().getString(R.string.id_key),note.getId() + "");
 
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity,(int)note.getId(),intent,0);
+
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerMillis *1000,pendingIntent);
     }
 }

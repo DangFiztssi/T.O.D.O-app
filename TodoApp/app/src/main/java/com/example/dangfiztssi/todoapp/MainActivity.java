@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -139,6 +139,35 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetPosId(){
         presenter.resetPosId();
+    }
+
+    public void saveImage(Note note){
+        View ln = findViewById(R.id.lnSave);
+
+        EditText edtTile, edtDes;
+        edtTile = (EditText)  ln.findViewById(R.id.edtTitle);
+        edtDes = (EditText) ln.findViewById(R.id.edtDescription);
+
+        edtTile.setText(note.getTitle());
+        edtDes.setText(note.getDescription());
+
+        String fileName = "testNew.jpeg";
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        ln.setDrawingCacheEnabled(true);
+//        Bitmap bitmap = v.getDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(255, 255, Bitmap.Config.ARGB_8888);
+        ln.draw(new Canvas(bitmap));
+        Log.e("run","..");
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 95, new FileOutputStream(new File(sdCard, fileName)));
+            Log.e("success","");
+        }
+        catch (Exception e){
+            Log.e("error", e + "");
+            e.printStackTrace();
+        }
+        Log.e("done",".");
     }
 
 }

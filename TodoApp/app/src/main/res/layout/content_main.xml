@@ -30,5 +30,9 @@
         </LinearLayout>
 
     </ScrollView>
+    <include
+        android:id="@+id/lnSave"
+        layout="@layout/dialog_new_note"
+        />
 
 </LinearLayout>

@@ -217,7 +217,7 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         holder.lnHeader.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ((MainActivity)activity).saveAsImage(note);
+                ((MainActivity)activity).saveImage(note);
                 return false;
             }
         });
