@@ -1,25 +1,14 @@
 package com.example.dangfiztssi.todoapp;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,7 +69,6 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         Note note = lstNoteMain.get(position);
 
         holder.tvTile.setText(note.getTitle() + "");
-//        holder.tvDueDate.setText(note.getDueDate() + " ");
         holder.tvDes.setText(note.getDescription() + "");
 
         if(note.isReminder()){
@@ -143,15 +131,20 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         float initRadius = (float) Math.max(view.getHeight(),centerX);
 
         if(view.getVisibility() == View.VISIBLE) {
-            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, 0, initRadius);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, 0, initRadius);
 
-            view.setVisibility(View.VISIBLE);
-            animator.start();
+                view.setVisibility(View.VISIBLE);
+                animator.start();
+            }
+            else
+                view.setVisibility(View.VISIBLE);
         }
         else{
-            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, initRadius, 0);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, initRadius, 0);
 
-            view.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
 //            animator.addListener(new AnimatorListenerAdapter() {
 //                @Override
 //                public void onAnimationEnd(Animator animation) {
@@ -160,56 +153,12 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 //                }
 //            });
 
-            animator.start();
+                animator.start();
+            }
+            else
+                view.setVisibility(View.GONE);
         }
     }
-
-    private void slideTopToBottom(View view){
-        TranslateAnimation animation = new TranslateAnimation(0,0,-view.getHeight(),2);
-        animation.setDuration(300);
-        animation.setFillAfter(false);
-        view.startAnimation(animation);
-        view.setVisibility(View.VISIBLE);
-    }
-
-    private void setAnimShowOption(final View view){
-
-        int centerX = (view.getLeft() + view.getRight()) / 2;
-        int centerY = 0;
-
-        float initRadius = (float) Math.max(view.getHeight(),centerX);
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0,initRadius);
-
-        view.setVisibility(View.VISIBLE);
-//        animator.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                super.onAnimationStart(animation);
-//            }
-//        });
-
-        animator.start();
-    }
-
-    private void setAnimHideOption(final View view){
-        int centerX = (view.getLeft() + view.getRight()) / 2;
-        int centerY = 0;
-
-        float initRadius = (float) Math.max(view.getHeight(),centerX);
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, initRadius,0);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.GONE);
-                super.onAnimationEnd(animation);
-            }
-        });
-
-        animator.start();
-    }
-
 
     public void setOnClick(final myViewHolder holder, final Note note){
         holder.lnHeader.setOnClickListener(new View.OnClickListener() {
@@ -300,27 +249,6 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         });
     }
 
-    private void resetPostId(){
-        for(int i = 0; i < lstNoteMain.size(); i++)
-            lstNoteMain.get(i).setPosId(i);
-    }
-
-    public void setVisible(View v){
-        TranslateAnimation animate = new TranslateAnimation(0,0,0,v.getHeight());
-        animate.setDuration(100);
-        animate.setFillAfter(true);
-        v.startAnimation(animate);
-        v.setVisibility(View.VISIBLE);
-    }
-
-    public void setGone(View v){
-        TranslateAnimation animate = new TranslateAnimation(0,0,0,v.getHeight());
-        animate.setDuration(100);
-        animate.setFillAfter(false);
-        v.startAnimation(animate);
-        v.setVisibility(View.GONE);
-    }
-
     @Override
     public int getItemCount() {
         return lstNoteMain.size();
@@ -328,80 +256,30 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
     public void updateStarBtn(final ImageView star){
 
-        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.bounce);
-
-//        AnimatorSet animatorSet = new AnimatorSet();
-//
-//        ObjectAnimator rotation = ObjectAnimator.ofFloat(star,"rotation", 0f, 360f);
-//        rotation.setDuration(300);
-//        rotation.setInterpolator(new AccelerateInterpolator());
-//
-//        ObjectAnimator bounceX = ObjectAnimator.ofFloat(star, "scaleX", 0.2f, 1f);
-//        bounceX.setDuration(300);
-//        bounceX.setInterpolator(new OvershootInterpolator());
-//
-//        ObjectAnimator bounceY = ObjectAnimator.ofFloat(star, "scaleY", 0.2f, 1f);
-//        bounceY.setDuration(300);
-//        bounceY.setInterpolator(new OvershootInterpolator());
-//        bounceY.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                star.setImageResource(R.drawable.star);
-//            }
-//        });
-//
-//        animatorSet.play(rotation);
-//        animatorSet.play(bounceX).with(bounceX).after(rotation);
-//
-//        animatorSet.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                star.setImageResource(R.drawable.star_black);
-//            }
-//        });
-//
-//        animatorSet.start();
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                star.setImageResource(R.drawable.star);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        star.startAnimation(animation);
+        ((MainActivity)activity).updateStar(star);
 
     }
 
     private void updateDoneBtn(final ImageView checkDone){
-        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.rotate_scale);
-
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                checkDone.setImageResource(R.drawable.check_done);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        checkDone.startAnimation(animation);
+//        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.rotate_scale);
+//
+//        animation.setInterpolator(new AccelerateInterpolator());
+//        animation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                checkDone.setImageResource(R.drawable.check_done);
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
+//
+//        checkDone.startAnimation(animation);
+        ((MainActivity)activity).updateRotateAndScale(checkDone, true);
     }
 }

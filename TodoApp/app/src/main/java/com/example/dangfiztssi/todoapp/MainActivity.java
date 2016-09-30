@@ -13,9 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.File;
@@ -66,22 +69,6 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-//            saveAsImage(lnMain);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void saveAsImage(Note note){
@@ -167,5 +154,92 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.e("done",".");
     }
+
+    public void updateStar(final ImageView star){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+//        AnimatorSet animatorSet = new AnimatorSet();
+//
+//        ObjectAnimator rotation = ObjectAnimator.ofFloat(star,"rotation", 0f, 360f);
+//        rotation.setDuration(300);
+//        rotation.setInterpolator(new AccelerateInterpolator());
+//
+//        ObjectAnimator bounceX = ObjectAnimator.ofFloat(star, "scaleX", 0.2f, 1f);
+//        bounceX.setDuration(300);
+//        bounceX.setInterpolator(new OvershootInterpolator());
+//
+//        ObjectAnimator bounceY = ObjectAnimator.ofFloat(star, "scaleY", 0.2f, 1f);
+//        bounceY.setDuration(300);
+//        bounceY.setInterpolator(new OvershootInterpolator());
+//        bounceY.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                star.setImageResource(R.drawable.star);
+//            }
+//        });
+//
+//        animatorSet.play(rotation);
+//        animatorSet.play(bounceX).with(bounceX).after(rotation);
+//
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                star.setImageResource(R.drawable.star_black);
+//            }
+//        });
+//
+//        animatorSet.start();
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                star.setImageResource(R.drawable.star);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        star.startAnimation(animation);
+    }
+
+    public void updateRotateAndScale(final ImageView v, final boolean isCheckDone){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_scale);
+
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(isCheckDone)
+                    v.setImageResource(R.drawable.check_done);
+                else{//check due date
+                    if(((Integer)v.getTag()) == 0){
+                        v.setImageResource(R.drawable.check_yes);
+                    }
+                    else{
+                        v.setImageResource(R.drawable.cancel_black);
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        v.startAnimation(animation);
+    }
+
 
 }
