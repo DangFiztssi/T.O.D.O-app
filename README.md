@@ -1,6 +1,6 @@
 # Pre-work - *T.O.D.O*
 
-**T.O.D.O** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
+**T.O.D.O** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editin, deleting an existing item, reminder due date for a special item or mark star for important item.
 
 Submitted by: **Nguyen Van Dang**
 
@@ -19,7 +19,7 @@ The following **optional** features are implemented:
 * [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
 * [x] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
 * [x] Add support for completion due dates for todo items (and display within listview item)
-* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
+* [x] Use a **Dialog** instead of new Activity for editing items
 * [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
 
 The following **additional** features are implemented:
@@ -28,12 +28,13 @@ The following **additional** features are implemented:
 * [x] Support mark items as done when they was actually done
 * [x] Notify due dates of specific todo item
 * [x] Mark star items are important
+* [x] Add splash screen to app
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![demo](demo.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
