@@ -1,4 +1,6 @@
 <resources>
+    <dimen name="size_logo_splash_screen">82dp</dimen>
+
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">4dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

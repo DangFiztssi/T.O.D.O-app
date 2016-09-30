@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TodoApp</string>
+    <string name="app_name">T.O.D.O</string>
     <string name="action_settings">Settings</string>
 
     <string name="hint_title_note">Note title</string>
@@ -7,6 +7,10 @@
     <string name="pick_color">Pick  color</string>
     <string name="mark_is_important">Mark is important?</string>
     <string name="reminder">Reminder</string>
+
+    <string name="title_key">title</string>
+    <string name="des_key">description</string>
+    <string name="id_key">id</string>
 
     <string name="white_color">99ffff</string>;
     <string name="orange_color">99FBAF3F</string>

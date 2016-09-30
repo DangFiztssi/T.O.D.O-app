@@ -1,15 +1,14 @@
 package com.example.dangfiztssi.todoapp;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,7 +69,6 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         Note note = lstNoteMain.get(position);
 
         holder.tvTile.setText(note.getTitle() + "");
-//        holder.tvDueDate.setText(note.getDueDate() + " ");
         holder.tvDes.setText(note.getDescription() + "");
 
         if(note.isReminder()){
@@ -133,15 +131,20 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         float initRadius = (float) Math.max(view.getHeight(),centerX);
 
         if(view.getVisibility() == View.VISIBLE) {
-            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, 0, initRadius);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, 0, initRadius);
 
-            view.setVisibility(View.VISIBLE);
-            animator.start();
+                view.setVisibility(View.VISIBLE);
+                animator.start();
+            }
+            else
+                view.setVisibility(View.VISIBLE);
         }
         else{
-            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, initRadius, 0);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, 0, initRadius, 0);
 
-            view.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
 //            animator.addListener(new AnimatorListenerAdapter() {
 //                @Override
 //                public void onAnimationEnd(Animator animation) {
@@ -150,56 +153,12 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 //                }
 //            });
 
-            animator.start();
+                animator.start();
+            }
+            else
+                view.setVisibility(View.GONE);
         }
     }
-
-    private void slideTopToBottom(View view){
-        TranslateAnimation animation = new TranslateAnimation(0,0,-view.getHeight(),2);
-        animation.setDuration(300);
-        animation.setFillAfter(false);
-        view.startAnimation(animation);
-        view.setVisibility(View.VISIBLE);
-    }
-
-    private void setAnimShowOption(final View view){
-
-        int centerX = (view.getLeft() + view.getRight()) / 2;
-        int centerY = 0;
-
-        float initRadius = (float) Math.max(view.getHeight(),centerX);
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0,initRadius);
-
-        view.setVisibility(View.VISIBLE);
-//        animator.addListener(new AnimatorListenerAdapter() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//                super.onAnimationStart(animation);
-//            }
-//        });
-
-        animator.start();
-    }
-
-    private void setAnimHideOption(final View view){
-        int centerX = (view.getLeft() + view.getRight()) / 2;
-        int centerY = 0;
-
-        float initRadius = (float) Math.max(view.getHeight(),centerX);
-
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, initRadius,0);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.GONE);
-                super.onAnimationEnd(animation);
-            }
-        });
-
-        animator.start();
-    }
-
 
     public void setOnClick(final myViewHolder holder, final Note note){
         holder.lnHeader.setOnClickListener(new View.OnClickListener() {
@@ -217,7 +176,7 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         holder.lnHeader.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ((MainActivity)activity).saveAsImage(note);
+                ((MainActivity)activity).saveImage(note);
                 return false;
             }
         });
@@ -234,9 +193,10 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
                 lstNoteMain.remove(currentPos);
                 if(note.isPriority()) {
-                    holder.imgStar.setImageResource(R.drawable.star);
+//                    holder.imgStar.setImageResource(R.drawable.star);
                     notifyItemMoved(currentPos,0);
                     lstNoteMain.add(0,tmp);
+                    updateStarBtn(holder.imgStar);
                 }
                 else {
                     holder.imgStar.setImageResource(R.drawable.star_black);
@@ -258,6 +218,7 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
                 if(note.isDone()) {
                     holder.imgIconDone.setImageResource(R.drawable.check_done);
+                    updateDoneBtn(holder.imgIconDone);
                     holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 else {
@@ -288,29 +249,37 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
         });
     }
 
-    private void resetPostId(){
-        for(int i = 0; i < lstNoteMain.size(); i++)
-            lstNoteMain.get(i).setPosId(i);
-    }
-
-    public void setVisible(View v){
-        TranslateAnimation animate = new TranslateAnimation(0,0,0,v.getHeight());
-        animate.setDuration(100);
-        animate.setFillAfter(true);
-        v.startAnimation(animate);
-        v.setVisibility(View.VISIBLE);
-    }
-
-    public void setGone(View v){
-        TranslateAnimation animate = new TranslateAnimation(0,0,0,v.getHeight());
-        animate.setDuration(100);
-        animate.setFillAfter(false);
-        v.startAnimation(animate);
-        v.setVisibility(View.GONE);
-    }
-
     @Override
     public int getItemCount() {
         return lstNoteMain.size();
+    }
+
+    public void updateStarBtn(final ImageView star){
+
+        ((MainActivity)activity).updateStar(star);
+
+    }
+
+    private void updateDoneBtn(final ImageView checkDone){
+//        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.rotate_scale);
+//
+//        animation.setInterpolator(new AccelerateInterpolator());
+//        animation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                checkDone.setImageResource(R.drawable.check_done);
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
+//
+//        checkDone.startAnimation(animation);
+        ((MainActivity)activity).updateRotateAndScale(checkDone, true);
     }
 }

@@ -13,28 +13,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.dangfiztssi.todoapp.db.NoteContact;
 import com.example.dangfiztssi.todoapp.db.NoteDBHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,7 +90,6 @@ public class MainActivityPresenter {
         dia.setCanceledOnTouchOutside(false);
 
         final EditText edtTitle, edtDescription;
-        final Switch isImportant;
         final TextView tvDateReminder, tvTimeReminder;
         final ImageView btnStar, btnEnableReminder;
         ImageView btnNew;
@@ -102,7 +97,6 @@ public class MainActivityPresenter {
 
         edtTitle = (EditText) view.findViewById(R.id.edtTitle);
         edtDescription = (EditText) view.findViewById(R.id.edtDescription);
-        isImportant = (Switch) view.findViewById(R.id.markIsImportant);
         btnNew = (ImageView) view.findViewById(R.id.btnSave);
         btnCancel = (ImageView) view.findViewById(R.id.btnCancel);
         btnStar= (ImageView) view.findViewById(R.id.btnStar);
@@ -120,8 +114,8 @@ public class MainActivityPresenter {
             edtDescription.setText(noteEdit.getDescription() + "");
 
             if(noteEdit.isPriority()) {
-                btnStar.setImageResource(R.drawable.star);
                 btnStar.setTag(1);
+                activity.updateStar(btnStar);
             }
             else {
                 btnStar.setImageResource(R.drawable.star_black);
@@ -130,9 +124,8 @@ public class MainActivityPresenter {
 
             if(noteEdit.isReminder()){
 
-                Log.e("is reminder", noteEdit.isReminder() + "");
                 btnEnableReminder.setTag(1);
-                btnEnableReminder.setImageResource(R.drawable.check_yes);
+                btnEnableReminder.setImageResource(R.drawable.cancel_black);
                 tvDateReminder.setEnabled(true);
                 tvTimeReminder.setEnabled(true);
                 tvDateReminder.setTextColor(activity.getResources().getColor(R.color.white_color));
@@ -149,9 +142,8 @@ public class MainActivityPresenter {
                 tvTimeReminder.setText(sdfTime.format(new Date(Long.parseLong(noteEdit.getDueDate()+"")*1000)));
             }
             else{
-                btnStar.setTag(0);
                 btnEnableReminder.setTag(0);
-                btnEnableReminder.setImageResource(R.drawable.cancel_black);
+                btnEnableReminder.setImageResource(R.drawable.check_yes);
                 tvDateReminder.setEnabled(false);
                 tvTimeReminder.setEnabled(false);
                 tvDateReminder.setTextColor(activity.getResources().getColor(R.color.gray_color));
@@ -180,7 +172,8 @@ public class MainActivityPresenter {
                 }
                 else{
                     btnStar.setTag(1);
-                    btnStar.setImageResource(R.drawable.star);
+//                    btnStar.setImageResource(R.drawable.star);
+                    activity.updateStar(btnStar);
                 }
             }
         });
@@ -243,7 +236,7 @@ public class MainActivityPresenter {
                     tvDateReminder.setTextColor(activity.getResources().getColor(R.color.gray_color));
                     tvTimeReminder.setTextColor(activity.getResources().getColor(R.color.gray_color));
                     btnEnableReminder.setTag(0);
-                    btnEnableReminder.setImageResource(R.drawable.check_yes);
+//                    btnEnableReminder.setImageResource(R.drawable.check_yes);
                 }
                 else{
                     tvDateReminder.setEnabled(true);
@@ -251,8 +244,9 @@ public class MainActivityPresenter {
                     tvDateReminder.setTextColor(activity.getResources().getColor(R.color.white_color));
                     tvTimeReminder.setTextColor(activity.getResources().getColor(R.color.white_color));
                     btnEnableReminder.setTag(1);
-                    btnEnableReminder.setImageResource(R.drawable.cancel_black);
+//                    btnEnableReminder.setImageResource(R.drawable.cancel_black);
                 }
+                activity.updateRotateAndScale(btnEnableReminder, false);
             }
         });
 
@@ -271,7 +265,6 @@ public class MainActivityPresenter {
                                 (Integer)btnStar.getTag()==1 ? true : false);
                         saveNewNote(n);
 
-                        setAlarm(n);
                     }
                     else{
                         Note tmp = lstNoteMain.get(position);
@@ -308,12 +301,22 @@ public class MainActivityPresenter {
             @Override
             public void onShow(DialogInterface dialog) {
                 setAnimShow(dia.getCurrentFocus().getRootView());
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edtTitle.getWindowToken(), 0);
             }
         });
 
 
 
-        dia.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        dia.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+//        dia.setOnShowListener(new DialogInterface.OnShowListener() {
+//            @Override
+//            public void onShow(DialogInterface dialog) {
+//                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(edtTitle.getWindowToken(), 0);
+//            }
+//        });
 
         dia.show();
     }
@@ -338,10 +341,14 @@ public class MainActivityPresenter {
 
         float finalRadius = (float) Math.max(centerX, centerY);
 
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0, finalRadius);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        view.setVisibility(View.VISIBLE);
-        animator.start();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centerY, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            view.setVisibility(View.VISIBLE);
+            animator.start();
+        }
+        else
+            view.setVisibility(View.VISIBLE);
     }
 
     private void setAnimHide(final View view){
@@ -350,17 +357,21 @@ public class MainActivityPresenter {
 
         float initRadius = view.getWidth();
 
-        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, view.getHeight(), initRadius,0);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, view.getHeight(), initRadius, 0);
 
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                view.setVisibility(View.INVISIBLE);
-                super.onAnimationEnd(animation);
-            }
-        });
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setVisibility(View.INVISIBLE);
+                    super.onAnimationEnd(animation);
+                }
+            });
 
-        animator.start();
+            animator.start();
+        }
+        else
+            view.setVisibility(View.INVISIBLE);
     }
 
     private boolean isValidForAdd(String title, String description){
@@ -486,6 +497,13 @@ public class MainActivityPresenter {
                 null
         );
 
+
+        if(note.isReminder()){
+            if(Calendar.getInstance().getTimeInMillis() < Long.parseLong(note.getDueDate() + "")*1000) {
+                setReminder(note);
+            }
+        }
+
     }
 
     public void deleteDB(Note note){
@@ -554,8 +572,17 @@ public class MainActivityPresenter {
 
     }
 
+    public void setReminder(Note note){
+        long triggerMillis = Long.parseLong(note.getDueDate()+"");
 
-    public void saveImageNote(Note note){
+        Intent intent = new Intent(activity, MyReceiver.class);
+        intent.putExtra(activity.getResources().getString(R.string.title_key), note.getTitle() + "");
+        intent.putExtra(activity.getResources().getString(R.string.des_key), note.getDescription() + "");
+        intent.putExtra(activity.getResources().getString(R.string.id_key),note.getId() + "");
 
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity,(int)note.getId(),intent,0);
+
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerMillis *1000,pendingIntent);
     }
 }

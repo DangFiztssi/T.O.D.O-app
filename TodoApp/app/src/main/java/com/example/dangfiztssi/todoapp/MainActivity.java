@@ -13,13 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
+import static com.example.dangfiztssi.todoapp.R.id.edtTitle;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,37 +58,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
                 addNewNote(-1);
             }
         });
-
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-//            saveAsImage(lnMain);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void saveAsImage(Note note){
@@ -92,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_new_note, null, false );
 
         EditText edttitle, edtDes;
-        edttitle = (EditText) v.findViewById(R.id.edtTitle);
+        edttitle = (EditText) v.findViewById(edtTitle);
         edtDes = (EditText) v.findViewById(R.id.edtDescription);
 
         edtDes.setText(note.getTitle());
@@ -140,5 +125,121 @@ public class MainActivity extends AppCompatActivity {
     public void resetPosId(){
         presenter.resetPosId();
     }
+
+    public void saveImage(Note note){
+        View ln = findViewById(R.id.lnSave);
+
+        EditText edtTile, edtDes;
+        edtTile = (EditText)  ln.findViewById(edtTitle);
+        edtDes = (EditText) ln.findViewById(R.id.edtDescription);
+
+        edtTile.setText(note.getTitle());
+        edtDes.setText(note.getDescription());
+
+        String fileName = "testNew.jpeg";
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        ln.setDrawingCacheEnabled(true);
+//        Bitmap bitmap = v.getDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(255, 255, Bitmap.Config.ARGB_8888);
+        ln.draw(new Canvas(bitmap));
+        Log.e("run","..");
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 95, new FileOutputStream(new File(sdCard, fileName)));
+            Log.e("success","");
+        }
+        catch (Exception e){
+            Log.e("error", e + "");
+            e.printStackTrace();
+        }
+        Log.e("done",".");
+    }
+
+    public void updateStar(final ImageView star){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+//        AnimatorSet animatorSet = new AnimatorSet();
+//
+//        ObjectAnimator rotation = ObjectAnimator.ofFloat(star,"rotation", 0f, 360f);
+//        rotation.setDuration(300);
+//        rotation.setInterpolator(new AccelerateInterpolator());
+//
+//        ObjectAnimator bounceX = ObjectAnimator.ofFloat(star, "scaleX", 0.2f, 1f);
+//        bounceX.setDuration(300);
+//        bounceX.setInterpolator(new OvershootInterpolator());
+//
+//        ObjectAnimator bounceY = ObjectAnimator.ofFloat(star, "scaleY", 0.2f, 1f);
+//        bounceY.setDuration(300);
+//        bounceY.setInterpolator(new OvershootInterpolator());
+//        bounceY.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                star.setImageResource(R.drawable.star);
+//            }
+//        });
+//
+//        animatorSet.play(rotation);
+//        animatorSet.play(bounceX).with(bounceX).after(rotation);
+//
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                star.setImageResource(R.drawable.star_black);
+//            }
+//        });
+//
+//        animatorSet.start();
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                star.setImageResource(R.drawable.star);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        star.startAnimation(animation);
+    }
+
+    public void updateRotateAndScale(final ImageView v, final boolean isCheckDone){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_scale);
+
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if(isCheckDone)
+                    v.setImageResource(R.drawable.check_done);
+                else{//check due date
+                    if(((Integer)v.getTag()) == 0){
+                        v.setImageResource(R.drawable.check_yes);
+                    }
+                    else{
+                        v.setImageResource(R.drawable.cancel_black);
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        v.startAnimation(animation);
+    }
+
 
 }
