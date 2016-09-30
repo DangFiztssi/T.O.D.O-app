@@ -2,6 +2,8 @@ package com.example.dangfiztssi.todoapp;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -234,9 +244,10 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
                 lstNoteMain.remove(currentPos);
                 if(note.isPriority()) {
-                    holder.imgStar.setImageResource(R.drawable.star);
+//                    holder.imgStar.setImageResource(R.drawable.star);
                     notifyItemMoved(currentPos,0);
                     lstNoteMain.add(0,tmp);
+                    updateStarBtn(holder.imgStar);
                 }
                 else {
                     holder.imgStar.setImageResource(R.drawable.star_black);
@@ -258,6 +269,7 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
 
                 if(note.isDone()) {
                     holder.imgIconDone.setImageResource(R.drawable.check_done);
+                    updateDoneBtn(holder.imgIconDone);
                     holder.tvTile.setPaintFlags(holder.tvTile.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
                 else {
@@ -312,5 +324,84 @@ public class RowNoteAdapter extends RecyclerView.Adapter<RowNoteAdapter.myViewHo
     @Override
     public int getItemCount() {
         return lstNoteMain.size();
+    }
+
+    public void updateStarBtn(final ImageView star){
+
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.bounce);
+
+//        AnimatorSet animatorSet = new AnimatorSet();
+//
+//        ObjectAnimator rotation = ObjectAnimator.ofFloat(star,"rotation", 0f, 360f);
+//        rotation.setDuration(300);
+//        rotation.setInterpolator(new AccelerateInterpolator());
+//
+//        ObjectAnimator bounceX = ObjectAnimator.ofFloat(star, "scaleX", 0.2f, 1f);
+//        bounceX.setDuration(300);
+//        bounceX.setInterpolator(new OvershootInterpolator());
+//
+//        ObjectAnimator bounceY = ObjectAnimator.ofFloat(star, "scaleY", 0.2f, 1f);
+//        bounceY.setDuration(300);
+//        bounceY.setInterpolator(new OvershootInterpolator());
+//        bounceY.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                star.setImageResource(R.drawable.star);
+//            }
+//        });
+//
+//        animatorSet.play(rotation);
+//        animatorSet.play(bounceX).with(bounceX).after(rotation);
+//
+//        animatorSet.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                star.setImageResource(R.drawable.star_black);
+//            }
+//        });
+//
+//        animatorSet.start();
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                star.setImageResource(R.drawable.star);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        star.startAnimation(animation);
+
+    }
+
+    private void updateDoneBtn(final ImageView checkDone){
+        Animation animation = AnimationUtils.loadAnimation(activity, R.anim.rotate_scale);
+
+        animation.setInterpolator(new AccelerateInterpolator());
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                checkDone.setImageResource(R.drawable.check_done);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        checkDone.startAnimation(animation);
     }
 }

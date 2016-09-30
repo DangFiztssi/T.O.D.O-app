@@ -14,8 +14,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +21,10 @@ import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -307,7 +305,15 @@ public class MainActivityPresenter {
 
 
 
-        dia.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        dia.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        dia.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(edtTitle.getWindowToken(), 0);
+            }
+        });
 
         dia.show();
     }
@@ -482,8 +488,9 @@ public class MainActivityPresenter {
 
 
         if(note.isReminder()){
-            if(SystemClock.elapsedRealtime() < Long.parseLong(note.getDueDate() + ""))
+            if(Calendar.getInstance().getTimeInMillis() < Long.parseLong(note.getDueDate() + "")*1000) {
                 setReminder(note);
+            }
         }
 
     }

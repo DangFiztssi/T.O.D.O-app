@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import static com.example.dangfiztssi.todoapp.R.id.edtTitle;
+
 public class MainActivity extends AppCompatActivity {
 
     private MainActivityPresenter presenter;
@@ -53,13 +55,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
                 addNewNote(-1);
             }
         });
-
 
     }
 
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_new_note, null, false );
 
         EditText edttitle, edtDes;
-        edttitle = (EditText) v.findViewById(R.id.edtTitle);
+        edttitle = (EditText) v.findViewById(edtTitle);
         edtDes = (EditText) v.findViewById(R.id.edtDescription);
 
         edtDes.setText(note.getTitle());
@@ -145,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         View ln = findViewById(R.id.lnSave);
 
         EditText edtTile, edtDes;
-        edtTile = (EditText)  ln.findViewById(R.id.edtTitle);
+        edtTile = (EditText)  ln.findViewById(edtTitle);
         edtDes = (EditText) ln.findViewById(R.id.edtDescription);
 
         edtTile.setText(note.getTitle());

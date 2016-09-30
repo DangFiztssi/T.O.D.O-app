@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lnMainDialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="#F4F8F9"
     android:orientation="vertical"
+    android:scrollbars="none"
     android:paddingBottom="@dimen/padding_top_bottom_dialog_new"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
     android:paddingTop="@dimen/padding_top_bottom_dialog_new">
 
-    <ScrollView
+    <LinearLayout
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -296,5 +297,5 @@
                 android:src="@drawable/star_black" />
 
         </FrameLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
